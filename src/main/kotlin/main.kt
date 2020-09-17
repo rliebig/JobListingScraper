@@ -6,6 +6,8 @@ import org.openqa.selenium.Dimension
 //import org.openqa.selenium.safari.SafariDriver
 import org.openqa.selenium.support.ui.WebDriverWait
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
+import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.chrome.ChromeOptions
 import java.io.File
 import java.io.IOException
 import java.io.ObjectInputFilter
@@ -102,7 +104,9 @@ fun scrapList(url : String) {
 //TODO("REFACTOR THIS PRETTY SOON")
 fun acquireCurrentJobs(city : String, keywords : String) : List<String>{
     val returnList = mutableListOf<String>()
-    val driver = HtmlUnitDriver(true)
+    val options = ChromeOptions()
+    options.addArguments("--headless")
+    val driver = ChromeDriver(options)
 
     val listUrls = mutableListOf<String>()
 
