@@ -107,7 +107,7 @@ fun scrapList(url : String) {
 fun acquireCurrentJobs(city : String, keywords : String) : List<String>{
     val returnList = mutableListOf<String>()
     val options = ChromeOptions()
-    //options.addArguments("--headless")
+    options.addArguments("--headless")
     val driver = ChromeDriver(options)
 
     val listUrls = mutableListOf<String>()
