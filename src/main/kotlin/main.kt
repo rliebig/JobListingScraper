@@ -145,15 +145,18 @@ fun acquireCurrentJobs(city : String, keywords : String) : List<String>{
         }
         if(nextLink != "")
             driver.navigate().to(nextLink)
-
-        WebDriverWait(driver, 10)
-            .until {
-                driver.findElement(
-                    By.ByClassName(
-                        "col-lg-3"
+        try {
+            WebDriverWait(driver, 10)
+                .until {
+                    driver.findElement(
+                        By.ByClassName(
+                            "col-lg-3"
+                        )
                     )
-                )
-            }
+                }
+        } catch (e: Exception) {
+            println("Dangerous exception, currently unknown")
+        }
     }
 
     try {
