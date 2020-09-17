@@ -147,6 +147,7 @@ fun acquireCurrentJobs(city : String, keywords : String) : List<String>{
                 }
             }
         }
+
         if(nextLink != "")
             driver.navigate().to(nextLink)
         try {
@@ -159,7 +160,7 @@ fun acquireCurrentJobs(city : String, keywords : String) : List<String>{
                     )
                 }
         } catch (e: Exception) {
-            println("Dangerous exception, currently unknown")
+            printException(e, "For some reason, this did not work.")
         }
     }
 
