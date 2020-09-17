@@ -107,6 +107,7 @@ fun scrapList(url : String) {
 
 //TODO("REFACTOR THIS PRETTY SOON")
 fun acquireCurrentJobs(city : String, keywords : String) : List<String>{
+    System.setProperty("webdriver.gecko.driver", "./")
     val returnList = mutableListOf<String>()
     val options = FirefoxOptions()
     options.addArguments("-headless")
