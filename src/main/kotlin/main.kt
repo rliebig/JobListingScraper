@@ -1,3 +1,4 @@
+import net.bytebuddy.asm.Advice
 import org.jsoup.HttpStatusException
 import org.jsoup.Jsoup
 import  org.jsoup.select.Elements
@@ -13,6 +14,7 @@ import java.io.IOException
 import java.io.ObjectInputFilter
 import java.lang.IndexOutOfBoundsException
 import java.net.SocketException
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 
@@ -160,6 +162,7 @@ fun acquireCurrentJobs(city : String, keywords : String) : List<String>{
                     )
                 }
         } catch (e: Exception) {
+            File("error " + LocalDateTime.now().toString() + ".txt").writeText(driver.pageSource)
             printException(e, "For some reason, this did not work.")
         }
     }
