@@ -108,6 +108,11 @@ fun acquireCurrentJobs(city : String, keywords : String) : List<String>{
     val returnList = mutableListOf<String>()
     val options = ChromeOptions()
     options.addArguments("--headless")
+    options.addArguments("--no-sandbox")
+    options.addArguments("--windows-size=1920,1080")
+    options.addArguments("--disable-gpu")
+    options.addArguments("--ignore-certificate-errors")
+
     val driver = ChromeDriver(options)
 
     val listUrls = mutableListOf<String>()
