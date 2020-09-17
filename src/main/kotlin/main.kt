@@ -9,6 +9,8 @@ import org.openqa.selenium.support.ui.WebDriverWait
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
+import org.openqa.selenium.firefox.FirefoxDriver
+import org.openqa.selenium.firefox.FirefoxOptions
 import java.io.File
 import java.io.IOException
 import java.io.ObjectInputFilter
@@ -106,14 +108,10 @@ fun scrapList(url : String) {
 //TODO("REFACTOR THIS PRETTY SOON")
 fun acquireCurrentJobs(city : String, keywords : String) : List<String>{
     val returnList = mutableListOf<String>()
-    val options = ChromeOptions()
-    options.addArguments("--headless")
-    options.addArguments("--no-sandbox")
-    options.addArguments("--windows-size=1920,1080")
-    options.addArguments("--disable-gpu")
-    options.addArguments("--ignore-certificate-errors")
+    val options = FirefoxOptions()
+    options.addArguments("-headless")
 
-    val driver = ChromeDriver(options)
+    val driver = FirefoxDriver(options)
 
     val listUrls = mutableListOf<String>()
 
@@ -209,40 +207,36 @@ fun main(args : Array<String>) {
 
     val loneList = acquireCurrentJobs("bundesweit", "maschinenbau ingenieur")
 
-//    if (args[0] != "--no-refresh-data") {
-//        clearDirectory()
-        loneList.forEach {link->
-         //   scrapList(it)
 
-            try {
-                val linkUrl = link
-                val cssClass = "at-section-text-profile-content"
-                val pageContent = getPageContentByClass(linkUrl, cssClass)
-                println("Scanning $linkUrl")
-                parseList(pageContent)
-                getListWords(pageContent).forEach {
-                        word -> addWordToModel(filterWord(word))
-                }
-            } catch(e : SocketException) {
-                println("Network Exception! Is the internet turned on?")
-                println(e.stackTraceToString())
-            } catch(e : HttpStatusException) {
-                printException(e, "Fetching $link did not work")
-            } catch(e : IOException) {
-                printException(e, "Fetching $link did result in a network error")
+    loneList.forEach { link ->
+
+        try {
+            val linkUrl = link
+            val cssClass = "at-section-text-profile-content"
+            val pageContent = getPageContentByClass(linkUrl, cssClass)
+            println("Scanning $linkUrl")
+            parseList(pageContent)
+            getListWords(pageContent).forEach { word ->
+                addWordToModel(filterWord(word))
             }
+        } catch (e: SocketException) {
+            println("Network Exception! Is the internet turned on?")
+            println(e.stackTraceToString())
+        } catch (e: HttpStatusException) {
+            printException(e, "Fetching $link did not work")
+        } catch (e: IOException) {
+            printException(e, "Fetching $link did result in a network error")
         }
-//    }
+    }
+
 
     Model.saveModel("")
-    //Model.readModel("")
-    //Model.readModel("")
     println(Model.items)
 
     Model.filter()
 
-//        val wordCloud = WorldCloud()
-//        wordCloud.main()
+//  val wordCloud = WorldCloud()
+//  wordCloud.main()
 
     //val view = View()
     //view.main()
