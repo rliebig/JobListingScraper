@@ -123,7 +123,7 @@ fun acquireCurrentJobs(city : String, keywords : String) : List<String>{
         .until {
             driver.findElement(
                 By.ByClassName(
-                    "col-lg-3"
+                    "col-xs-12"
                 )
             )
         }
@@ -154,7 +154,7 @@ fun acquireCurrentJobs(city : String, keywords : String) : List<String>{
                 .until {
                     driver.findElement(
                         By.ByClassName(
-                            "col-lg-3"
+                            "col-xs-12"
                         )
                     )
                 }
