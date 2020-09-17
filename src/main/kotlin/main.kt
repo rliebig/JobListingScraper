@@ -167,7 +167,7 @@ fun acquireCurrentJobs(city : String, keywords : String) : List<String>{
                     )
                 }
         } catch (e: Exception) {
-            File("error" + LocalDateTime.now().toString() + ".txt").writeText(driver.pageSource)
+            File("error" + dateString() + ".txt").writeText(driver.pageSource)
             printException(e, "For some reason, this did not work.")
         }
     }
@@ -183,7 +183,7 @@ fun acquireCurrentJobs(city : String, keywords : String) : List<String>{
 }
 
 fun setCampaign(city : String, keywords: String) {
-    val dateString = LocalDateTime.now().toString()
+    val dateString = dateString()
     val cityAndKeywordsString = city + "-" + keywords.replace(" ", "-")
     val campStr = dateString + cityAndKeywordsString + "-" + Configuration.listRestrictionNumber.toString()
 

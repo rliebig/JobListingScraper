@@ -1,4 +1,5 @@
 import java.io.File
+import java.time.LocalDateTime
 
 fun printException(e : Exception, s : String = "") {
     if (s != "") {
@@ -21,3 +22,5 @@ fun clearDirectory(dirName  : String = Configuration.SentenceDirectory) {
         file.delete()
     }
 }
+
+fun dateString() : String = LocalDateTime.now().toString().replace(":", "-")
