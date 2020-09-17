@@ -162,7 +162,7 @@ fun acquireCurrentJobs(city : String, keywords : String) : List<String>{
                     )
                 }
         } catch (e: Exception) {
-            File("error " + LocalDateTime.now().toString() + ".txt").writeText(driver.pageSource)
+            File("error" + LocalDateTime.now().toString() + ".txt").writeText(driver.pageSource)
             printException(e, "For some reason, this did not work.")
         }
     }
