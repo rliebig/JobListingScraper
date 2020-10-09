@@ -10,7 +10,6 @@ fun parseList(content : Elements) {
     try {
         content[0].getElementsByTag("li").forEach { it ->
             parse(it.html())
-
         }
     } catch (e: IndexOutOfBoundsException) {
         println(e.toString())
@@ -36,6 +35,7 @@ fun filterWord(word : String) : String {
             .filter { it != ';' }
             .filter { it != '\n' }
             .filter { it != '/' }
+	    .filter { it != '"'}
             .filter { it != '\u00AD' }
             .toLowerCase()
 }

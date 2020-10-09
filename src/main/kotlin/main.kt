@@ -33,7 +33,6 @@ fun getListWords(content : Elements) : List<String> {
     } catch (e : IndexOutOfBoundsException) {
         println(e.toString())
     }
-
     return listWords.toList()
 }
 
@@ -91,30 +90,30 @@ fun scrapList(url : String) {
 
             println(getPagePublishedTime(url))
             parseList(pageContent)
+
             getListWords(pageContent).forEach {
                     word -> addWordToModel(filterWord(word))
             }
         } catch(e : SocketException) {
             println("Network Exception! Is the internet turned on?")
-            println(e.stackTraceToString())
-            } catch(e : HttpStatusException) {
-            printException(e, "Fetching $link did not work")
-        }
-
-    }
+            println(e.stackTraceToString()) 
+    	} catch(e : HttpStatusException) { 
+		printException(e, "Fetching $link did not work")
+	}
+    } 
 }
 
 
-//TODO("REFACTOR THIS PRETTY SOON")
 fun acquireCurrentJobs(city : String, keywords : String) : List<String>{
-    System.setProperty("webdriver.gecko.driver", "./")
-    val returnList = mutableListOf<String>()
+    if(System.getProperty("os.name").contains("ubuntu"))
+        System.setProperty("webdriver.gecko.driver", "./")
+    val returnList = ArrayList<String>()
     val options = FirefoxOptions()
     options.addArguments("-headless")
 
     val driver = FirefoxDriver(options)
 
-    val listUrls = mutableListOf<String>()
+    val listUrls = ArrayList<String>()
 
 
     driver.manage().window().size = Dimension(800, 800)
@@ -133,6 +132,7 @@ fun acquireCurrentJobs(city : String, keywords : String) : List<String>{
                 )
             )
         }
+
     var nextLink = ""
     repeat(Configuration.listRestrictionNumber) {
         for (webElement in driver.findElementsByTagName("a")) {
@@ -152,10 +152,12 @@ fun acquireCurrentJobs(city : String, keywords : String) : List<String>{
                     nextLink = ""
                 }
             }
-        }
+    	}
 
         if(nextLink != "")
             driver.navigate().to(nextLink)
+        else
+            throw IllegalStateException("lol")
         try {
             WebDriverWait(driver, 10)
                 .until {
@@ -191,29 +193,40 @@ fun setCampaign(city : String, keywords: String) {
     Configuration.databaseFile = campStr + "/" + Configuration.databaseFile
     Configuration.modelFile = campStr + "/" + Configuration.modelFile
 
+
     println("saving data under $campStr")
     File("$campStr/").mkdirs()
     File(Configuration.SentenceDirectory).mkdirs()
     File(Configuration.WebPageDirectory).mkdirs()
 }
 
-fun readCampaign(saved : String) {
-
+fun readCampaign(campStr : String) {
+    Configuration.SentenceDirectory = campStr + "/" + Configuration.SentenceDirectory
+    Configuration.WebPageDirectory = campStr + "/" + Configuration.WebPageDirectory
+    Configuration.databaseFile = campStr + "/" + Configuration.databaseFile
+    Configuration.modelFile = campStr + "/" + Configuration.modelFile
+    println("saving data under $campStr")
 }
 
 fun main(args : Array<String>) {
-    val city = "bundesweit"
-    val keywords = "elektro ingenieur"
+    val city = "München"
+    val keywords = "Softwareentwickler"
     setCampaign(city, keywords)
+    //readCampaign("2020-09-17T18-51-43-bundesweit-elektro-ingenieur-20")
+    val lonelist = ArrayList<String>()
+    try {
+        for (acquireCurrentJob in acquireCurrentJobs("münchen", "software entwickler")) {
+            lonelist.add(acquireCurrentJob)
+        }
+    } catch(e : Exception) {
+        printException(e)
+    }
 
-    val loneList = acquireCurrentJobs("bundesweit", "maschinenbau ingenieur")
 
-
-    loneList.forEach { link ->
-
+    lonelist.forEach { link ->
         try {
-            val linkUrl = link
-            val cssClass = "at-section-text-profile-content"
+          val linkUrl = link
+          val cssClass = "at-section-text-profile-content"
             val pageContent = getPageContentByClass(linkUrl, cssClass)
             println("Scanning $linkUrl")
             parseList(pageContent)
@@ -231,13 +244,13 @@ fun main(args : Array<String>) {
     }
 
 
-    Model.saveModel("")
-    println(Model.items)
+    Model.saveModel()
+  //println(Model.items)
+//   Model.readModel("")
+  Model.filter()
 
-    Model.filter()
-
-//  val wordCloud = WorldCloud()
-//  wordCloud.main()
+  val wordCloud = WorldCloud()
+    wordCloud.main()
 
     //val view = View()
     //view.main()

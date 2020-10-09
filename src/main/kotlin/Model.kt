@@ -13,17 +13,15 @@ object Model {
     fun filter() {
         val newItems = HashMap<String, Int>()
         for (item in items) {
-            if(item.key in bansWord) {}
-            else
-                newItems.put(item.key,item.value)
+            if(!bansWord.contains(item.key)) {
+                newItems[item.key] = item.value
+            }
         }
 
         items = newItems
     }
 
-    fun saveModel(fileName : String) {
-
-
+    fun saveModel() {
         val writer = FileWriter(Configuration.modelFile)
         items.forEach {
             (t,u) ->
@@ -32,7 +30,7 @@ object Model {
         writer.close()
     }
 
-    fun readModel(fileName : String) {
+    fun readModel() {
         val newItems = HashMap<String, Int>()
 
         val reader = FileReader(Configuration.modelFile)

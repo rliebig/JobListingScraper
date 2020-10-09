@@ -20,6 +20,7 @@ class View : Application() {
         barChart.title = "Debug"
 
         val series = XYChart.Series<String, Number>()
+        //TODO("This should be outsourced into model")
         Model.items.toSortedMap().filter {
             it.value > 2 && !Model.bansWord.contains(it.key)
         }.forEach { (key, value) ->
@@ -28,7 +29,6 @@ class View : Application() {
         }
 
         barChart.data.add(series)
-        //This Scaling is highly unsatisfactory
         barChart.barGap = 30.0
         barChart.categoryGap = 10.0
         barChart.minHeight = 600.0

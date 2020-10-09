@@ -9,6 +9,7 @@ fun printException(e : Exception, s : String = "") {
     println(e.stackTraceToString())
 }
 
+
 fun clearDirectory(dirName  : String = Configuration.SentenceDirectory) {
     val dir = File(dirName)
 

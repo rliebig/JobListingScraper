@@ -72,6 +72,7 @@ class WorldCloud : Application() {
 
         val sortedData = pointData
 
+
         val shapesList = mutableListOf<Text>()
         sampleData.forEach { (t, u) ->
             val startingX = Random.nextDouble(100.0,1600.0)
@@ -110,7 +111,7 @@ class WorldCloud : Application() {
             text.onMouseExited = EventHandler {
                 popup.hide()
             }
-            //val (sizeX, sizeY) = (((t - lowestValue)/distance).toDouble(), ((t - lowestValue)/distance).toDouble())
+
             if (checkCollusion(shapesList, text)) {
                 for (i in 0..limit) {
                     val theta = (6.0 * Math.PI * i.toDouble()) / limit.toDouble()
@@ -135,6 +136,7 @@ class WorldCloud : Application() {
             shapesList.add(text)
             //intersect check
         }
+
         val listGroup = Group()
         shapesList.forEach {
             text ->

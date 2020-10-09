@@ -34,16 +34,15 @@ class ModelSpec : StringSpec() {
             Configuration.SentenceDirectory = "sentenceTest/"
             clearDirectory()
             Model.items = HashMap<String, Int>()
-            startExposed()
         }
 
         "Insert value into Model and save" {
             Model.items["test"] = 2
-            Model.saveModel("")
+            Model.saveModel()
         }
 
         "Read value from saved Model" {
-            Model.readModel("")
+            Model.readModel()
             Model.items.keys shouldContain "test"
             Model.items.keys.size shouldBe 1
             Model.items.shouldHaveValues(2)
@@ -77,7 +76,6 @@ class SentenceSpec : StringSpec() {
             Configuration.SentenceDirectory = "sentenceTest"
             clearDirectory()
             Model.items = HashMap<String, Int>()
-            startExposed()
         }
 
         "Add test sentence to keyword test" {

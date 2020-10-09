@@ -6,6 +6,7 @@ import org.jetbrains.exposed.sql.addLogger
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+import java.io.FileWriter
 
 object ErrorTable : IntIdTable() {
     val url = varchar("url", 300)
@@ -14,20 +15,25 @@ object ErrorTable : IntIdTable() {
 
 object Error {
     fun add(url : String, errorMessage : String) {
-        transaction {
-            addLogger(StdOutSqlLogger)
-            ErrorTable.insert {
-                it[ErrorTable.url] = url
-                it[ErrorTable.errorMessage] = errorMessage
-            }
-        }
+        val fileName = Configuration.SentenceDirectory + "/" + Configuration.errorFileName
+        val writer = FileWriter(fileName)
+        writer.appendLine("$url:::$errorMessage")
+
+//        transaction {
+//            addLogger(StdOutSqlLogger)
+//            ErrorTable.insert {
+//                it[ErrorTable.url] = url
+//                it[ErrorTable.errorMessage] = errorMessage
+//            }
+//        }
     }
 
+    @Deprecated("This has no reason to be used.")
     fun getErrors() : List<String> {
         val errors = mutableListOf<String>()
         transaction {
-            val error_information = ErrorTable.selectAll()
-            for (resultRow in error_information) {
+            val errorInformation = ErrorTable.selectAll()
+            for (resultRow in errorInformation) {
                 errors.add("${resultRow[ErrorTable.url]}: ${resultRow[ErrorTable.errorMessage]}")
             }
         }

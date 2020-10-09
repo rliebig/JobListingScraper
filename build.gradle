@@ -1,10 +1,11 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.4.0'
     id 'org.openjfx.javafxplugin' version '0.0.8'
+    id 'application'
 }
 
-group 'org.example'
-version '1.0-SNAPSHOT'
+group 'tech.liebig'
+version '0.1' 
 
 test {
     useJUnitPlatform()
@@ -15,7 +16,9 @@ repositories {
     mavenCentral()
 }
 
-
+application {
+    mainClassName = "MainKt"
+}
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib"

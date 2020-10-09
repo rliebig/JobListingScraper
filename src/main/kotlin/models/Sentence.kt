@@ -15,7 +15,7 @@ import java.lang.IllegalArgumentException
 
 
 class Sentence(val keyword : String) {
-    val list : MutableList<String> = mutableListOf<String>()
+    val list : ArrayList<String> = ArrayList<String>()
     val webPage : WebPage? = null
     val keywordSecure = filterWord(keyword)
 
@@ -27,7 +27,6 @@ class Sentence(val keyword : String) {
             val file = File("${Configuration.SentenceDirectory}/$keywordSecure.txt")
             if (!file.exists())
                 file.createNewFile()
-
 
             val reader  = file.reader()
             reader.forEachLine {
