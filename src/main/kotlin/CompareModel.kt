@@ -1,6 +1,13 @@
 import models.createKeywordString
 
 fun main() {
+    findAllCampaigns().forEach {
+        val isCorrupted = campaignIsCorrupted(it)
+        println("$it: $isCorrupted")
+    }
+}
+
+fun otherFun() {
     val firstCampaignName = "2020-10-11T12-18-36.975803München-Softwareentwickler-4"
     val secondCampaignName = "2020-10-10T12-29-44.978996München-Softwareentwickler-4"
 
