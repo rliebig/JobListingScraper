@@ -60,6 +60,10 @@ fun compareCampaigns(firstCampaignName : String,
     }
 }
 
+fun createDiffHistory(directory : String) {
+
+}
+
 class CompareView : Application() {
     override fun start(primaryStage : Stage?) {
         val hbox = HBox()

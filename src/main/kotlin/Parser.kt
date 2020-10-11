@@ -16,6 +16,21 @@ fun parseList(content : Elements) {
     }
 }
 
+val bannedLetters = setOf(
+    '-',
+    ',',
+    '(',
+    ')',
+    '<',
+    '>',
+    '&',
+    ';',
+    '\n',
+    '/',
+    '"',
+    '\u00AD'
+)
+
 fun filterWord(word : String) : String {
     return word
             .removePrefix("<strong>")
@@ -25,18 +40,7 @@ fun filterWord(word : String) : String {
             .removePrefix("<b>")
             .removeSuffix("</b>")
             .removeSuffix("</p>")
-            .filter { it != '-' }
-            .filter { it != ',' }
-            .filter { it != '(' }
-            .filter { it != ')' }
-            .filter { it != '<' }
-            .filter { it != '>' }
-            .filter { it != '&' }
-            .filter { it != ';' }
-            .filter { it != '\n' }
-            .filter { it != '/' }
-	    .filter { it != '"'}
-            .filter { it != '\u00AD' }
+            .filter { it !in bannedLetters }
             .toLowerCase()
 }
 
