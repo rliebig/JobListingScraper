@@ -1,3 +1,7 @@
+import javafx.application.Application
+import javafx.scene.Scene
+import javafx.scene.layout.HBox
+import javafx.stage.Stage
 import models.createKeywordString
 import java.io.File
 import java.io.FileWriter
@@ -26,6 +30,8 @@ fun main() {
             previous = it
         }
     }
+    val compareView = CompareView()
+    compareView.main()
 }
 
 fun compareCampaigns(firstCampaignName : String,
@@ -51,5 +57,19 @@ fun compareCampaigns(firstCampaignName : String,
     for(key in hashMap.keys) {
         val string = "$key: ${hashMap[key]}"
         fileWriter.write("$string\n")
+    }
+}
+
+class CompareView : Application() {
+    override fun start(primaryStage : Stage?) {
+        val hbox = HBox()
+        primaryStage?.title = "Relative Chart Menu"
+        val scene = Scene(hbox, 800.0, 600.0)
+        primaryStage?.scene = scene
+        primaryStage?.show()
+    }
+
+    fun main() {
+        launch()
     }
 }

@@ -271,6 +271,7 @@ fun main(args : Array<String>) {
     Model.filter()
 
     val wordCloud = WorldCloud()
+
     wordCloud.main()
 
 }
