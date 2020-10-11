@@ -1,3 +1,5 @@
+import models.WebPage
+import models.saveWebPage
 import net.bytebuddy.asm.Advice
 import org.jsoup.HttpStatusException
 import org.jsoup.Jsoup
@@ -208,6 +210,22 @@ fun readCampaign(campStr : String) {
     println("saving data under $campStr")
 }
 
+fun getPageTitle(linkUrl : String) : String {
+    if(System.getProperty("os.name").contains("ubuntu")) {
+        System.setProperty("webdriver.gecko.driver", "./")
+    }
+    val options = FirefoxOptions()
+    options.addArguments("-headless")
+    val driver = FirefoxDriver(options)
+    driver.manage().window().size = Dimension(800, 800)
+
+    driver.navigate().to(linkUrl)
+    val returnString = driver.title
+
+    driver.close()
+    return returnString
+}
+
 fun main(args : Array<String>) {
     val city = "München"
     val keywords = "Softwareentwickler"
@@ -225,14 +243,19 @@ fun main(args : Array<String>) {
 
     lonelist.forEach { link ->
         try {
-          val linkUrl = link
-          val cssClass = "at-section-text-profile-content"
+            val linkUrl = link
+            val cssClass = "at-section-text-profile-content"
             val pageContent = getPageContentByClass(linkUrl, cssClass)
+            val title = getPageTitle(linkUrl)
             println("Scanning $linkUrl")
             parseList(pageContent)
-            getListWords(pageContent).forEach { word ->
+            val listWords = getListWords(pageContent)
+            listWords.forEach { word ->
                 addWordToModel(filterWord(word))
             }
+            // This just looks plain wrong.
+            val webPage = WebPage(linkUrl, title, listWords)
+            saveWebPage(webPage)
         } catch (e: SocketException) {
             println("Network Exception! Is the internet turned on?")
             println(e.stackTraceToString())
@@ -245,14 +268,10 @@ fun main(args : Array<String>) {
 
 
     Model.saveModel()
-  //println(Model.items)
-//   Model.readModel("")
-  Model.filter()
+    Model.filter()
 
-  val wordCloud = WorldCloud()
+    val wordCloud = WorldCloud()
     wordCloud.main()
 
-    //val view = View()
-    //view.main()
 }
 

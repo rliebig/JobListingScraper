@@ -59,7 +59,7 @@ class WorldCloud : Application() {
 
         val pointSize = 2.0
         val limit = 200
-        var radius = 10
+        var radius : Double = 10.0
 
         val sampleData = Model.items
 
@@ -118,7 +118,7 @@ class WorldCloud : Application() {
                     val x = startingX + radius * cos(theta)
                     val y = startingY + radius * sin(theta)
                     //canvas?.graphicsContext2D?.fillOval(x,y, pointSize,pointSize)
-                    radius += 1
+                    radius += 0.1
 
 
                     text.x = x

@@ -1,5 +1,6 @@
 import java.io.File
 import java.time.LocalDateTime
+import models.Error
 
 fun printException(e : Exception, s : String = "") {
     if (s != "") {
@@ -7,6 +8,7 @@ fun printException(e : Exception, s : String = "") {
     }
     println(e.toString())
     println(e.stackTraceToString())
+    Error.add("", e.toString())
 }
 
 
