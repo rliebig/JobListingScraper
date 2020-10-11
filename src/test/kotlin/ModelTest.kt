@@ -19,8 +19,6 @@ import io.kotest.property.checkAll
 import io.kotest.property.forAll
 import models.Sentence
 import models.WebPage
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.transactions.transaction
 import java.io.File
 import java.lang.IllegalArgumentException
 

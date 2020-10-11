@@ -12,10 +12,8 @@ fun main() {
 
     val hashMap = HashMap<String, Int>()
 
-    //Here comes an excruating slow operation
     for (key in firstModel.items.keys) {
          if(secondModel.items.keys.contains(key)) {
-             //It seems like this code needs to be further improved in this regard.
              val diff = firstModel.items[key]?.minus(secondModel.items[key]!!)
              hashMap[key] = diff!!
          } else {

@@ -1,12 +1,9 @@
-import org.jetbrains.exposed.dao.id.IntIdTable
-import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.transactions.transaction
 import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
 
 
-
+//TODO("Rewrite to just use a ModeInstance")
 object Model {
     var items  = HashMap<String,Int>()
 
@@ -17,7 +14,6 @@ object Model {
                 newItems[item.key] = item.value
             }
         }
-
         items = newItems
     }
 
