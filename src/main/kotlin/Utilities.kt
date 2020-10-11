@@ -11,6 +11,9 @@ fun printException(e : Exception, s : String = "") {
     Error.add("", e.toString())
 }
 
+fun campaignIsCorrupted(path : String) : Boolean {
+    return File("$path/model.txt").exists()
+}
 
 fun clearDirectory(dirName  : String = Configuration.SentenceDirectory) {
     val dir = File(dirName)
