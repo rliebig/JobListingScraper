@@ -1,16 +1,36 @@
 import models.createKeywordString
+import java.io.File
+import java.io.FileWriter
 
 fun main() {
-    findAllCampaigns().forEach {
+    val campaigns = findAllCampaigns()
+    var previous =  campaigns.get(0)
+
+    val directory = "Diffs/${dateString()}"
+    File(directory).mkdir()
+
+    campaigns.forEach {
+        val corrupted = campaignIsCorrupted(it)
+        if (!corrupted) {
+            previous = it
+            return@forEach
+        }
+    }
+
+    campaigns.forEach {
         val isCorrupted = campaignIsCorrupted(it)
         println("$it: $isCorrupted")
+
+        if (previous != it && !isCorrupted) {
+            compareCampaigns(previous, it, directory)
+            previous = it
+        }
     }
 }
 
-fun otherFun() {
-    val firstCampaignName = "2020-10-11T12-18-36.975803München-Softwareentwickler-4"
-    val secondCampaignName = "2020-10-10T12-29-44.978996München-Softwareentwickler-4"
-
+fun compareCampaigns(firstCampaignName : String,
+                     secondCampaignName : String,
+                     directory : String) {
     val firstModel = ModelInstance()
     val secondModel = ModelInstance()
 
@@ -27,8 +47,9 @@ fun otherFun() {
              hashMap[key] = firstModel.items[key]!!
          }
     }
-
+    val fileWriter = FileWriter("$directory/$firstCampaignName-$secondCampaignName.txt")
     for(key in hashMap.keys) {
-        println("$key: ${hashMap[key]}")
+        val string = "$key: ${hashMap[key]}"
+        fileWriter.write("$string\n")
     }
 }

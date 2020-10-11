@@ -20,8 +20,7 @@ fun findAllCampaigns() : List<String> {
     val currentDir = File(".")
     currentDir.walk().filter {
         file ->
-        file.name.contains("2020")
-    }.forEach {
+        file.name.contains("2020") }.forEach {
         returnList.add(it.name)
     }
 
