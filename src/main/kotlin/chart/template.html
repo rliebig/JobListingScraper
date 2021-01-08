@@ -1,0 +1,26 @@
+<!doctype html>1
+<html>
+    <head>
+        <script src="https://cdn.anychart.com/releases/v8/js/anychart-core.min.js"></script>
+        <script src="https://cdn.anychart.com/releases/v8/js/anychart-cartesian.min.js"></script>
+    </head>
+    <body>
+        <div id="container"></div>
+        <script>
+            var data = [
+                /*REPLACEKEY*/
+            ];
+
+            var chart = anychart.bar();
+
+            chart.title("Website Traffic Statistics");
+            chart.xAxis().title("Website");
+            chart.yAxis().title("Traffic Per Minute");
+
+            var series = chart.bar(data);
+            chart.container("container");
+            chart.tooltip("{%tooltip}")
+            chart.draw();
+        </script>
+    </body>
+</html>

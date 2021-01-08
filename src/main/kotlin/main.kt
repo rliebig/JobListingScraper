@@ -1,6 +1,7 @@
+import cityvisualisation.showHeatmap
+import driverManager.driver
 import models.WebPage
 import models.saveWebPage
-import net.bytebuddy.asm.Advice
 import org.jsoup.HttpStatusException
 import org.jsoup.Jsoup
 import  org.jsoup.select.Elements
@@ -8,18 +9,12 @@ import org.openqa.selenium.By
 import org.openqa.selenium.Dimension
 //import org.openqa.selenium.safari.SafariDriver
 import org.openqa.selenium.support.ui.WebDriverWait
-import org.openqa.selenium.htmlunit.HtmlUnitDriver
-import org.openqa.selenium.chrome.ChromeDriver
-import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.firefox.FirefoxDriver
 import org.openqa.selenium.firefox.FirefoxOptions
 import java.io.File
 import java.io.IOException
-import java.io.ObjectInputFilter
 import java.lang.IndexOutOfBoundsException
 import java.net.SocketException
-import java.time.LocalDate
-import java.time.LocalDateTime
 
 
 fun getListWords(content : Elements) : List<String> {
@@ -111,7 +106,7 @@ fun acquireCurrentJobs(city : String, keywords : String) : List<String>{
         System.setProperty("webdriver.gecko.driver", "./")
     val returnList = ArrayList<String>()
     val options = FirefoxOptions()
-    options.addArguments("-headless")
+//    options.addArguments("-headless")
 
     val driver = FirefoxDriver(options)
 
@@ -120,6 +115,22 @@ fun acquireCurrentJobs(city : String, keywords : String) : List<String>{
 
     driver.manage().window().size = Dimension(800, 800)
     driver.navigate().to("https://stepstone.de")
+
+    // DSGVO overwrite
+    try {
+        val foo = WebDriverWait(driver, 10)
+            .until {
+                driver.findElement(
+                    By.ById(
+                        "ccmgt_explicit_accept"
+                    )
+                )
+            }
+        driver.findElementById("ccmgt_explicit_accept").click()
+
+    } catch (e : Exception) {
+
+    }
 
     driver.findElementByName("ke").sendKeys(keywords)
     driver.findElementByName("ws").sendKeys(city)
@@ -160,7 +171,8 @@ fun acquireCurrentJobs(city : String, keywords : String) : List<String>{
             driver.navigate().to(nextLink)
         else
             throw IllegalStateException("lol")
-        try {
+        try
+        {
             WebDriverWait(driver, 10)
                 .until {
                     driver.findElement(
@@ -175,17 +187,20 @@ fun acquireCurrentJobs(city : String, keywords : String) : List<String>{
         }
     }
 
-    try {
+    try
+    {
         driver.close()
-        driver.quit()
-    } catch (e : Exception) {
+    }
+    catch (e : Exception)
+    {
         printException(e, "Expected error did happen")
     }
 
     return returnList
 }
 
-fun setCampaign(city : String, keywords: String) {
+fun setCampaign(city : String, keywords: String)
+{
     val dateString = dateString()
     val cityAndKeywordsString = city + "-" + keywords.replace(" ", "-")
     val campStr = dateString + cityAndKeywordsString + "-" + Configuration.listRestrictionNumber.toString()
@@ -202,12 +217,17 @@ fun setCampaign(city : String, keywords: String) {
     File(Configuration.WebPageDirectory).mkdirs()
 }
 
+fun useless()
+{
+    println("This is good")
+}
+
 fun readCampaign(campStr : String) {
     Configuration.SentenceDirectory = campStr + "/" + Configuration.SentenceDirectory
     Configuration.WebPageDirectory = campStr + "/" + Configuration.WebPageDirectory
     Configuration.databaseFile = campStr + "/" + Configuration.databaseFile
     Configuration.modelFile = campStr + "/" + Configuration.modelFile
-    println("saving data under $campStr")
+    println("reading data under $campStr")
 }
 
 fun getPageTitle(linkUrl : String) : String {
@@ -226,35 +246,80 @@ fun getPageTitle(linkUrl : String) : String {
     return returnString
 }
 
+object driverManager {
+    var driver = FirefoxDriver()
+    init{
+        val options = FirefoxOptions()
+        options.addArguments("-headless")
+
+        driver = FirefoxDriver(options)
+    }
+}
+
+fun getPageCity(url : String, driver : FirefoxDriver) : String {
+    if(System.getProperty("os.name").contains("ubuntu")) {
+        System.setProperty("webdriver.gecko.driver", "./")
+    }
+
+    driver.navigate().to(url)
+    var returnString = ""
+
+    /*for(webElement in driver.findElements(By.tagName("a"))) {
+        if(webElement.getAttribute("href") == "#location") {
+            println("Location + " + webElement.text)
+            returnString = webElement.text
+            break
+        }
+    }*/
+    driver.findElements(By.className("at-listing__list-icons_location")).forEach {
+        returnString = it.text
+        return@forEach
+    }
+
+
+    return returnString
+}
+
+// Write a choosing dialog for selecting old campaigns or creating now ones
 fun main(args : Array<String>) {
-    val city = "München"
+    val city = "bundesweit"
     val keywords = "Softwareentwickler"
-    setCampaign(city, keywords)
-    //readCampaign("2020-09-17T18-51-43-bundesweit-elektro-ingenieur-20")
+    setCampaign(city = city, keywords = keywords)
     val lonelist = ArrayList<String>()
+
+    val options = FirefoxOptions()
+    options.addArguments("-headless")
+
+    val driver = FirefoxDriver(options)
+
     try {
-        for (acquireCurrentJob in acquireCurrentJobs("münchen", "software entwickler")) {
+        for (acquireCurrentJob in acquireCurrentJobs(city, keywords)) {
             lonelist.add(acquireCurrentJob)
         }
     } catch(e : Exception) {
         printException(e)
     }
 
-
+    val myList = ArrayList<cityvisualisation.toggle>()
     lonelist.forEach { link ->
         try {
-            val linkUrl = link
             val cssClass = "at-section-text-profile-content"
-            val pageContent = getPageContentByClass(linkUrl, cssClass)
-            val title = getPageTitle(linkUrl)
-            println("Scanning $linkUrl")
+            val pageContent = getPageContentByClass(link, cssClass)
+            val title = getPageTitle(link)
+            val city = getPageCity(link, driver)
+                .replace("Großraum ", "")
+                .split(",")[0]
+                .split(" ")[0]
+            println(city)
+            myList.add(cityvisualisation.toggle(city = city, link = link, title = title))
+
+            println("Scanning $link")
             parseList(pageContent)
             val listWords = getListWords(pageContent)
             listWords.forEach { word ->
                 addWordToModel(filterWord(word))
             }
-            // This just looks plain wrong.
-            val webPage = WebPage(linkUrl, title, listWords)
+            val webPage = WebPage(link, title, listWords)
             saveWebPage(webPage)
         } catch (e: SocketException) {
             println("Network Exception! Is the internet turned on?")
@@ -266,7 +331,9 @@ fun main(args : Array<String>) {
         }
     }
 
-
+    cityvisualisation.toggleHeatmap(myList)
+    print(myList)
+    //Model.readModel()
     Model.saveModel()
     Model.filter()
 

@@ -2,9 +2,6 @@ import models.Sentence
 import org.jsoup.select.Elements
 import java.lang.IndexOutOfBoundsException
 
-
-
-
 fun parseList(content : Elements) {
     val keyWords = mutableListOf<String>()
     try {
@@ -33,23 +30,31 @@ val bannedLetters = setOf(
 
 fun filterWord(word : String) : String {
     return word
-            .removePrefix("<strong>")
-            .removePrefix("<li>")
-            .removeSuffix("</li>")
-            .removePrefix("<p>")
-            .removePrefix("<b>")
-            .removeSuffix("</b>")
-            .removeSuffix("</p>")
-            .filter { it !in bannedLetters }
-            .toLowerCase()
+        .removePrefix("<strong>")
+        .removePrefix("<li>")
+        .removeSuffix("</li>")
+        .removePrefix("<p>")
+        .removePrefix("<b>")
+        .removeSuffix("</b>")
+        .removeSuffix("</p>")
+        .removeSuffix("nbsp")
+        .filter { it !in bannedLetters }
+        .toLowerCase()
 }
 
 fun sanitizeHtml(text : String) : String {
-    return text.replace("</li>", "")
+    return text
+        .replace("</li>", "")
         .replace("&nbsp", "")
         .replace("z.B.", "zB")
         .replace("<strong>","")
         .replace("</strong>","")
+}
+
+fun sanitizeLocationString(text : String) : String {
+    return text
+        .replace(",", " ")
+        .split(" ")[0]
 }
 
 fun parse(text : String) : List<Sentence>{

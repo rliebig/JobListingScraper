@@ -1,12 +1,6 @@
 package models
 
 import filterWord
-import org.jetbrains.exposed.dao.id.IntIdTable
-import org.jetbrains.exposed.sql.StdOutSqlLogger
-import org.jetbrains.exposed.sql.addLogger
-import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.dao.*
 
 import java.io.File
 import java.io.FileReader
