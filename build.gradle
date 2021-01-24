@@ -24,9 +24,10 @@ application {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
     implementation "org.jsoup:jsoup:1.13.1"
-    implementation "org.seleniumhq.selenium:selenium-java:3.9.1"
-    compile group: 'org.seleniumhq.selenium', name: 'htmlunit-driver', version: '2.43.1'
-    compile group: 'org.seleniumhq.selenium', name: 'selenium-edge-driver', version: '4.0.0-alpha-7' //Thanks for using https://jar-download.com
+    implementation "org.seleniumhq.selenium:selenium-java:4.0.0-alpha-7"
+    compile group: 'org.seleniumhq.selenium', name: 'htmlunit-driver', version: '2.43.1+'
+    compile group: 'org.seleniumhq.selenium', name: 'selenium-remote-driver', version: '4.0.0-alpha-7'
+    compile group: 'org.seleniumhq.selenium', name: 'selenium-edge-driver', version: '4.0.0-alpha-7+' //Thanks for using https://jar-download.com
 
 
     testImplementation("io.kotest:kotest-runner-junit5:4.2.2") // for kotest framework

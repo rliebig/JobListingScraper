@@ -1,5 +1,3 @@
-import cityvisualisation.showHeatmap
-import driverManager.driver
 import models.WebPage
 import models.saveWebPage
 import org.jsoup.HttpStatusException
@@ -9,9 +7,7 @@ import org.openqa.selenium.By
 import org.openqa.selenium.Dimension
 //import org.openqa.selenium.safari.SafariDriver
 import org.openqa.selenium.support.ui.WebDriverWait
-import org.openqa.selenium.firefox.FirefoxDriver
-import org.openqa.selenium.edge.EdgeDriver
-import org.openqa.selenium.firefox.FirefoxOptions
+import org.openqa.selenium.chrome.ChromeDriver
 import java.io.File
 import java.io.IOException
 import java.lang.IndexOutOfBoundsException
@@ -105,11 +101,11 @@ fun scrapList(url : String) {
 fun acquireCurrentJobs(city : String, keywords : String) : List<String>{
     if(System.getProperty("os.name").contains("ubuntu"))
         System.setProperty("webdriver.gecko.driver", "./")
+    System.setProperty("webdriver.chrome.driver", "C:/Users/Admin/Desktop/chromedriver.exe")
     val returnList = ArrayList<String>()
-    val options = FirefoxOptions()
 //    options.addArguments("-headless")
 
-    val driver = EdgeDriver(options)
+    val driver = ChromeDriver()
 
     val listUrls = ArrayList<String>()
 
@@ -235,9 +231,7 @@ fun getPageTitle(linkUrl : String) : String {
     if(System.getProperty("os.name").contains("ubuntu")) {
         System.setProperty("webdriver.gecko.driver", "./")
     }
-    val options = FirefoxOptions()
-    options.addArguments("-headless")
-    val driver = FirefoxDriver(options)
+    val driver = ChromeDriver()
     driver.manage().window().size = Dimension(800, 800)
 
     driver.navigate().to(linkUrl)
@@ -248,16 +242,13 @@ fun getPageTitle(linkUrl : String) : String {
 }
 
 object driverManager {
-    var driver = FirefoxDriver()
+    var driver = ChromeDriver()
     init{
-        val options = FirefoxOptions()
-        options.addArguments("-headless")
-
-        driver = FirefoxDriver(options)
+        driver = ChromeDriver()
     }
 }
 
-fun getPageCity(url : String, driver : FirefoxDriver) : String {
+fun getPageCity(url: String, driver: ChromeDriver) : String {
     if(System.getProperty("os.name").contains("ubuntu")) {
         System.setProperty("webdriver.gecko.driver", "./")
     }
@@ -283,15 +274,16 @@ fun getPageCity(url : String, driver : FirefoxDriver) : String {
 
 // Write a choosing dialog for selecting old campaigns or creating now ones
 fun main(args : Array<String>) {
+    System.setProperty("webdriver.chrome.driver", "C:/Users/Admin/Desktop/chromedriver.exe")
     val city = "bundesweit"
     val keywords = "Softwareentwickler"
     setCampaign(city = city, keywords = keywords)
     val lonelist = ArrayList<String>()
 
-    val options = FirefoxOptions()
-    options.addArguments("-headless")
+    //val options = FirefoxOptions()
+    //options.addArguments("-headless")
 
-    val driver = FirefoxDriver(options)
+    val driver = ChromeDriver()
 
     try {
         for (acquireCurrentJob in acquireCurrentJobs(city, keywords)) {
