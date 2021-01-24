@@ -50,7 +50,7 @@ class WorldCloud : Application() {
     }
 
     override fun start(primaryStage: Stage?) {
-        primaryStage?.title = "Cellular Automata Tests"
+        primaryStage?.title = "JobListingScraper"
 
         val root = Group()
         val zoomProperty = SimpleDoubleProperty(1.0)

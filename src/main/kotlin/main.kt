@@ -294,7 +294,7 @@ fun main(args : Array<String>) {
     }
 
     val myList = ArrayList<cityvisualisation.toggle>()
-    lonelist.forEach { link ->
+    lonelist.forEachIndexed { number, link ->
         try {
             val cssClass = "at-section-text-profile-content"
             val pageContent = getPageContentByClass(link, cssClass)
@@ -306,14 +306,18 @@ fun main(args : Array<String>) {
             println(city)
             myList.add(cityvisualisation.toggle(city = city, link = link, title = title))
 
-            println("Scanning $link")
+            println("($number/${lonelist.size}Scanning $link")
             parseList(pageContent)
-            val listWords = getListWords(pageContent)
-            listWords.forEach { word ->
-                addWordToModel(filterWord(word))
+            try {
+                val listWords = getListWords(pageContent)
+                listWords.forEach { word ->
+                    addWordToModel(filterWord(word))
+                }
+                val webPage = WebPage(link, title, listWords)
+                saveWebPage(webPage)
+            } catch (e : Exception) {
+                println(e.stackTrace)
             }
-            val webPage = WebPage(link, title, listWords)
-            saveWebPage(webPage)
         } catch (e: SocketException) {
             println("Network Exception! Is the internet turned on?")
             println(e.stackTraceToString())
@@ -324,7 +328,7 @@ fun main(args : Array<String>) {
         }
     }
 
-    cityvisualisation.toggleHeatmap(myList)
+//    cityvisualisation.toggleHeatmap(myList)
     print(myList)
     //Model.readModel()
     Model.saveModel()
