@@ -10,6 +10,7 @@ import org.openqa.selenium.Dimension
 //import org.openqa.selenium.safari.SafariDriver
 import org.openqa.selenium.support.ui.WebDriverWait
 import org.openqa.selenium.firefox.FirefoxDriver
+import org.openqa.selenium.edge.EdgeDriver
 import org.openqa.selenium.firefox.FirefoxOptions
 import java.io.File
 import java.io.IOException
@@ -108,7 +109,7 @@ fun acquireCurrentJobs(city : String, keywords : String) : List<String>{
     val options = FirefoxOptions()
 //    options.addArguments("-headless")
 
-    val driver = FirefoxDriver(options)
+    val driver = EdgeDriver(options)
 
     val listUrls = ArrayList<String>()
 
@@ -126,15 +127,15 @@ fun acquireCurrentJobs(city : String, keywords : String) : List<String>{
                     )
                 )
             }
-        driver.findElementById("ccmgt_explicit_accept").click()
+        driver.findElement(By.ById("ccmgt_explicit_accept")).click()
 
     } catch (e : Exception) {
 
     }
 
-    driver.findElementByName("ke").sendKeys(keywords)
-    driver.findElementByName("ws").sendKeys(city)
-    driver.findElementByClassName("btn-primary").click()
+    driver.findElement(By.ByName("ke")).sendKeys(keywords)
+    driver.findElement(By.ByName("ws")).sendKeys(city)
+    driver.findElement(By.ByClassName("btn-primary")).click()
 
 
     val foo = WebDriverWait(driver, 10)
@@ -148,7 +149,7 @@ fun acquireCurrentJobs(city : String, keywords : String) : List<String>{
 
     var nextLink = ""
     repeat(Configuration.listRestrictionNumber) {
-        for (webElement in driver.findElementsByTagName("a")) {
+        for (webElement in driver.findElements(By.ByTagName("a"))) {
             if (webElement.getAttribute("data-at") == "job-item-title") {
                 println(webElement.text)
                 val link = webElement.getAttribute("href")

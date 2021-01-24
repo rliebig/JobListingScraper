@@ -50,15 +50,15 @@ fun roth() {
                     )
                 )
             }
-        driver.findElementById("ccmgt_explicit_accept").click()
+        driver.findElement(By.ById("ccmgt_explicit_accept")).click()
 
     } catch (e : Exception) {
 
     }
 
-    driver.findElementByName("ke").sendKeys("Softwareentwickler")
-    driver.findElementByName("ws").sendKeys("München")
-    driver.findElementByClassName("btn-primary").click()
+    driver.findElement(By.ByName("ke")).sendKeys("Softwareentwickler")
+    driver.findElement(By.ByName("ws")).sendKeys("München")
+    driver.findElement(By.ByClassName("btn-primary")).click()
 
 
     val foo = WebDriverWait(driver, 10)
@@ -70,7 +70,7 @@ fun roth() {
             )
         }
 
-    for (webElement in driver.findElementsByTagName("a")) {
+    for (webElement in driver.findElements(By.ByTagName("a"))) {
         if(webElement.getAttribute("data-at") == "job-item-title") {
             println(webElement.text)
             println(webElement.getAttribute("href"))
