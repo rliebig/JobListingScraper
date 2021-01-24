@@ -136,7 +136,10 @@ class WorldCloud : Application() {
                             link.onAction = EventHandler {
                                 val rt = Runtime.getRuntime()
                                 println(string)
-                                rt.exec("open $string")
+                                if(System.getProperty("os.name").contains("Windows"))
+                                    rt.exec("explorer $string")
+                                else
+                                    rt.exec("open $string")
                             }
                             dialogBox.children.add(link)
                         }

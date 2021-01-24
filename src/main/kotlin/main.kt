@@ -275,6 +275,7 @@ fun getPageCity(url: String, driver: ChromeDriver) : String {
 // Write a choosing dialog for selecting old campaigns or creating now ones
 fun main(args : Array<String>) {
     System.setProperty("webdriver.chrome.driver", "C:/Users/Admin/Desktop/chromedriver.exe")
+    println(System.getProperty("os.name"))
     val city = "bundesweit"
     val keywords = "Softwareentwickler"
     setCampaign(city = city, keywords = keywords)
