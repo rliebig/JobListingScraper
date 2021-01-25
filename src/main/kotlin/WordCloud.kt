@@ -1,8 +1,4 @@
 import javafx.scene.Scene
-import javafx.scene.chart.BarChart
-import javafx.scene.chart.NumberAxis
-import javafx.scene.chart.CategoryAxis
-import javafx.scene.chart.XYChart
 import javafx.stage.Stage
 import javafx.application.Application
 import javafx.beans.InvalidationListener
@@ -11,20 +7,15 @@ import javafx.event.EventHandler
 import javafx.scene.Group
 import javafx.scene.canvas.Canvas
 import javafx.scene.control.*
-import javafx.scene.layout.BorderPane
 import javafx.scene.layout.HBox
 import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
-import javafx.scene.shape.Shape
 import javafx.scene.text.Font
-import javafx.scene.text.FontWeight
 import javafx.scene.text.Text
 import javafx.stage.Modality
 import javafx.stage.Popup
 import models.Sentence
 import java.io.File
-import java.lang.RuntimeException
-import java.util.*
 import kotlin.collections.HashMap
 import kotlin.math.cos
 import kotlin.math.sin
@@ -96,14 +87,14 @@ class WorldCloud : Application() {
                 vbox.style = "-fx-background-color: rgba(211,211,211,80);"
                 val set = Sentence(text.text)
                 set.getSentences().forEach {
-                    val hbox = HBox()
-                    val firstOccurance = it.split(text.text)
-                    hbox.children.add(Text(firstOccurance[0]))
+                    val box = HBox()
+                    val firstOccurrence = it.split(text.text)
+                    box.children.add(Text(firstOccurrence[0]))
                     val keyword = Text(text.text)
                     keyword.fill = Color.MEDIUMVIOLETRED
-                    hbox.children.add(keyword)
-                    hbox.children.add(Text(firstOccurance[1]))
-                    vbox.children.add(hbox)
+                    box.children.add(keyword)
+                    box.children.add(Text(firstOccurrence[1]))
+                    vbox.children.add(box)
                 }
                 popup.content.add(vbox)
                 popup.show(primaryStage)
@@ -132,12 +123,12 @@ class WorldCloud : Application() {
                         println(searchString)
                         if(searchString.contains(item)) {
                             val link = Hyperlink()
-                            link.setText(string)
+                            link.text = string
                             link.onAction = EventHandler {
                                 val rt = Runtime.getRuntime()
                                 println(string)
                                 if(System.getProperty("os.name").contains("Windows"))
-                                    rt.exec("explorer $string")
+                                    rt.exec("explorer \"$string\"")
                                 else
                                     rt.exec("open $string")
                             }
@@ -149,7 +140,7 @@ class WorldCloud : Application() {
                 }
 
                 val dialogScene = Scene(dialogBox, 600.0, 600.0)
-                dialog.scene= dialogScene
+                dialog.scene = dialogScene
                 dialog.show()
             }
 

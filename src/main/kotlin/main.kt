@@ -337,7 +337,6 @@ fun main(args : Array<String>) {
 
     val wordCloud = WorldCloud()
 
-    wordCloud.main()
 
 }
 
