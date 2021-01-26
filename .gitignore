@@ -7,3 +7,4 @@ gradlew.bat
 gradlew
 scripts/output.html
 scripts/test.html
+/lib/
